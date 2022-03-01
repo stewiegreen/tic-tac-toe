@@ -87,6 +87,11 @@ def find_winner(board):
         return False
 
 
+def check_for_tie(tie_game):
+    if tie_game == 8:
+        return True
+
+
 def player(turn):
     if turn % 2 == 0:
         player = "X"
@@ -95,15 +100,37 @@ def player(turn):
     return player
 
 
+def get_location(turn):
+    while True:
+        try:
+            location = int(input(
+                f'Player "{player(turn)}"s turn.  Use numeric keypad to select where your piece goes 1 - 9: '))
+            return location
+        except:
+            print("That's not a valid option!")
+
+
+def check_place(board, x, y):
+    if board[x][y] == '_':
+        return True
+    else:
+        print("That position is already taken!")
+        return False
+
+
 def main():
+    tie_game = 0
     turn = 2
     player(turn)
     board = game_board()
     print_board(board)
     while True:
-        location = int(input(
-            f'Player "{player(turn)}"s turn.  Use numeric keypad to select where your piece goes 1 - 9: '))
+        location = get_location(turn)
         x, y = keyboard_config(location)
+        while check_place(board, x, y) == False:
+            location = get_location(turn)
+            x, y = keyboard_config(location)
+
         place_piece(turn, board, x, y)
 
         print_board(board)
@@ -111,7 +138,13 @@ def main():
             print(f'Congratulations "{player(turn)}"!, You Won!')
             break
 
+        if check_for_tie(tie_game):
+            print('Tie Game!  You both Lose!')
+            break
+
         turn += 1
+        tie_game += 1
 
 
-main()
+if __name__ == '__main__':
+    main()
