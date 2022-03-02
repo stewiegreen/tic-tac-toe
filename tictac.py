@@ -101,10 +101,14 @@ def player(turn):
 
 
 def get_location(turn):
+
     while True:
         try:
             location = int(input(
                 f'Player "{player(turn)}"s turn.  Use numeric keypad to select where your piece goes 1 - 9: '))
+            while location == 0:
+                location = int(input(
+                    '0 is not a valid location. Use numeric keypad to select where your piece goes 1 - 9: '))
             return location
         except:
             print("That's not a valid option!")
